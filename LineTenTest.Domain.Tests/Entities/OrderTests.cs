@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LineTenTest.Domain.Entities;
 
-namespace LineTenTest.Domain.Tests
+namespace LineTenTest.Domain.Tests.Entities
 {
     public class OrderTests
     {
