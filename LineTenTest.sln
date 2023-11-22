@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.Api", "LineTenTest.Api\LineTenTest.Api.csproj", "{268833DC-69B7-495D-93EC-7B1930038DFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.Api", "LineTenTest.Api\LineTenTest.Api.csproj", "{268833DC-69B7-495D-93EC-7B1930038DFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.Domain", "LineTenTest.Domain\LineTenTest.Domain.csproj", "{FCCD992E-7324-4A6C-B476-91F8F584AEC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.Domain.Tests", "LineTenTest.Domain.Tests\LineTenTest.Domain.Tests.csproj", "{2CF3DE47-1617-485E-B8F6-536A0C41BC66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{268833DC-69B7-495D-93EC-7B1930038DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{268833DC-69B7-495D-93EC-7B1930038DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{268833DC-69B7-495D-93EC-7B1930038DFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCCD992E-7324-4A6C-B476-91F8F584AEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCCD992E-7324-4A6C-B476-91F8F584AEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCCD992E-7324-4A6C-B476-91F8F584AEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCCD992E-7324-4A6C-B476-91F8F584AEC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CF3DE47-1617-485E-B8F6-536A0C41BC66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CF3DE47-1617-485E-B8F6-536A0C41BC66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CF3DE47-1617-485E-B8F6-536A0C41BC66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CF3DE47-1617-485E-B8F6-536A0C41BC66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
