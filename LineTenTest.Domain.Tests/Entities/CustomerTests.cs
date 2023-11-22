@@ -19,5 +19,33 @@ namespace LineTenTest.Domain.Tests.Entities
             customer.LastName.Should().NotBeNull();
             customer.Phone.Should().NotBeNull();
         }
+
+        [Fact]
+        public void DefaultConstructor_WithPropertiesAssigned_PropertiesShouldReturnAssignedValues()
+        {
+            // Arrange
+            var email = "email";
+            var firstName = "firstName";
+            var lastName = "lastName";
+            var phone = "phone";
+            var id = 1;
+
+            //Act
+            var customer = new Customer()
+            {
+                Email = email,
+                FirstName = firstName,
+                LastName = lastName,
+                Id = id,
+                Phone = phone
+            };
+
+            // Assert
+            customer.Email.Should().Be(email);
+            customer.FirstName.Should().Be(firstName);
+            customer.LastName.Should().Be(lastName);
+            customer.Phone.Should().Be(phone);
+            customer.Id.Should().Be(id);
+        }
     }
 }
