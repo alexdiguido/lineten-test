@@ -6,7 +6,7 @@ namespace LineTenTest.Domain.Tests.Entities
     public class OrderTests
     {
         [Fact]
-        public void Order_Constructor_PropertyShouldContainsDefaultValues()
+        public void Order_Constructor_PropertiseShouldContainsDefaultValues()
         {
             var datetime = new DateTime();
             var order = new Order();
@@ -20,7 +20,7 @@ namespace LineTenTest.Domain.Tests.Entities
         }
 
         [Fact]
-        public void Order_Constructor_PropertyAssignedWithValue_PropertyShouldContainsAssignedValues()
+        public void Order_Constructor_PropertiesAssignedWithValue_PropertiesShouldContainsAssignedValues()
         {
             var createdDateTime = new DateTime();
             var updatedDateTime = createdDateTime.AddHours(1);
