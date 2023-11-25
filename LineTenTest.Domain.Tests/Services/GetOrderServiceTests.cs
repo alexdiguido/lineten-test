@@ -1,5 +1,4 @@
 ﻿using LineTenTest.Domain.Entities;
-using LineTenTest.Domain.Services;
 using LineTenTest.SharedKernel;
 using System;
 using System.Threading.Tasks;
@@ -8,6 +7,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using LineTenTest.Infrastructure;
+using LineTenTest.Domain.Services.Order;
+using LineTenTest.Domain.Exceptions;
 
 namespace LineTenTest.Domain.Tests.Services
 {

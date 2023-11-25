@@ -16,6 +16,13 @@ public class GetOrderService : IGetOrderService
 
     public async Task<Entities.Order> GetAsync(int orderId)
     {
-        throw new NotImplementedException();
+        var order = await _repository.FirstOrDefaultAsync(new GetOrderByIdSpecification(orderId));
+
+        if (order == null)
+        {
+            throw new NotFoundException("Order not found");
+        }
+
+        return order;
     }
 }
