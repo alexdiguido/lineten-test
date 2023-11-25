@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LineTenTest.Domain\LineTenTest.Domain.csproj" />
     <ProjectReference Include="..\LineTenTest.SharedKernel\LineTenTest.SharedKernel.csproj" />
   </ItemGroup>
 

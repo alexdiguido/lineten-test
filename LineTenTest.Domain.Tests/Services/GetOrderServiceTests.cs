@@ -11,30 +11,13 @@ using LineTenTest.Infrastructure;
 
 namespace LineTenTest.Domain.Tests.Services
 {
-    public class GetOrderServiceTests
+    public class GetOrderServiceTests : IClassFixture<DatabaseFixture>
     {
         private readonly EfRepository<Order> _orderRepository;
 
-        public GetOrderServiceTests()
+        public GetOrderServiceTests(DatabaseFixture dbFixture)
         {
-            var dbContext = SetupOrderContext();
-            _orderRepository = new EfRepository<Order>(dbContext);
-        }
-
-        private AppDbContext SetupOrderContext()
-        {
-            var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = ":memory:" };
-            var connectionString = connectionStringBuilder.ToString();
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite(connectionString)
-                .Options;
-
-            var dbContext = new AppDbContext(options);
-
-            dbContext.Database.OpenConnection();
-            dbContext.Database.EnsureCreated();
-
-            return dbContext;
+            _orderRepository = new EfRepository<Order>(dbFixture.DbContext);
         }
 
         private GetOrderService CreateService()
@@ -42,19 +25,44 @@ namespace LineTenTest.Domain.Tests.Services
             return new GetOrderService(_orderRepository);
         }
 
-        [Fact]
-        public async Task GetAsync_StateUnderTest_ExpectedBehavior()
+        [Fact] 
+        public async Task GetAsync_OrderExist_ShouldReturnOrderAllOrderData()
         {
             // Arrange
             var service = CreateService();
             int orderId = 1;
 
             // Act
-            var result = await service.GetAsync(
-                orderId);
+            var result = await service.GetAsync(orderId);
 
             // Assert
             result.Should().NotBeNull();
+            result.Id.Should().Be(orderId);
+            result.Customer.Should().NotBeNull();
+            result.Customer.FirstName.Should().NotBeNullOrWhiteSpace();
+            result.Customer.Email.Should().NotBeNullOrWhiteSpace();
+            result.Customer.LastName.Should().NotBeNullOrWhiteSpace();
+            result.Customer.Phone.Should().NotBeNullOrWhiteSpace();
+            result.Product.Should().NotBeNull();
+            result.Product.Description.Should().NotBeNullOrWhiteSpace();
+            result.Product.Name.Should().NotBeNullOrWhiteSpace();
+            result.Product.SKU.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Fact] 
+        public async Task GetAsync_OrderNotExist_ShouldThrowNotFoundException()
+        {
+            // Arrange
+            var service = CreateService();
+            int orderId = 100;
+            string message = "Order not found";
+
+            // Act
+            var result = async () => await service.GetAsync(orderId);
+
+            // Assert
+
+            await result.Should().ThrowAsync<NotFoundException>(message);
         }
     }
 }
