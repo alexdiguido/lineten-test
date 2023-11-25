@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LineTenTest.SharedKernel;
 
 namespace LineTenTest.Domain.Entities
 {
-    public class Order
+    public class Order : IDbEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
