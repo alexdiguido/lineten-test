@@ -1,14 +1,8 @@
 ﻿using Ardalis.GuardClauses;
 using LineTenTest.Api.Commands;
-using LineTenTest.Api.Dtos;
-using LineTenTest.Api.Utilities.Mappers;
-using LineTenTest.Domain.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using LineTenTest.Api.Utilities;
+using LineTenTest.Domain.Services.Order;
 
-namespace LineTenTest.Api.Services
+namespace LineTenTest.Api.Services.Order
 {
     public class CreateOrderRequestHandler : BaseOrderRequestHandler<CreateOrderCommand>
     {
@@ -19,12 +13,12 @@ namespace LineTenTest.Api.Services
             _service = service;
         }
 
-        protected override Func<Task<Order>> ExecuteServiceOperation(CreateOrderCommand request)
+        protected override Func<Task<Domain.Entities.Order>> ExecuteServiceOperation(CreateOrderCommand request)
         {
             Guard.Against.Null(request.CreateOrderRequest);
             Guard.Against.Negative(request.CreateOrderRequest.CustomerId);
             Guard.Against.Negative(request.CreateOrderRequest.ProductId);
-            return async() => await _service.CreateAsync(request.CreateOrderRequest);
+            return async () => await _service.CreateAsync(request.CreateOrderRequest);
         }
     }
 }

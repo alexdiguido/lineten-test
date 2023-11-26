@@ -2,12 +2,11 @@
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Utilities;
 using LineTenTest.Api.Utilities.Mappers;
-using LineTenTest.Domain.Entities;
 using LineTenTest.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LineTenTest.Api.Services
+namespace LineTenTest.Api.Services.Order
 {
     public abstract class BaseOrderRequestHandler<TRequest> : IRequestHandler<TRequest, ActionResult<OrderDto>>
             where TRequest : IRequest<ActionResult<OrderDto>>
@@ -19,11 +18,11 @@ namespace LineTenTest.Api.Services
             _logger = logger;
         }
 
-        protected abstract Func<Task<Order>> ExecuteServiceOperation(TRequest request);
+        protected abstract Func<Task<Domain.Entities.Order>> ExecuteServiceOperation(TRequest request);
 
         public async Task<ActionResult<OrderDto>> Handle(TRequest request, CancellationToken cancellationToken)
         {
-            Order? orderResult;
+            Domain.Entities.Order? orderResult;
             try
             {
                 orderResult = await ExecuteServiceOperation(request)();

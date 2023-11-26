@@ -1,5 +1,4 @@
-﻿using LineTenTest.Api.Services;
-using LineTenTest.Domain.Services.Order;
+﻿using LineTenTest.Domain.Services.Order;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -7,6 +6,7 @@ using Ardalis.Specification;
 using FluentAssertions;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.Api.Services.Order;
 using LineTenTest.Api.Utilities;
 using LineTenTest.Domain.Entities;
 using LineTenTest.Domain.Exceptions;

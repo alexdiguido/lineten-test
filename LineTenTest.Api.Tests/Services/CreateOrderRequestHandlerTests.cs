@@ -1,5 +1,4 @@
-﻿using LineTenTest.Api.Services;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using Moq.AutoMock;
 using Xunit;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.Api.Services.Order;
 using LineTenTest.Api.Utilities;
 using LineTenTest.Domain.Entities;
 using LineTenTest.Domain.Exceptions;
@@ -16,7 +16,6 @@ using LineTenTest.Domain.Services.Order;
 using LineTenTest.SharedKernel.ApiModels;
 using LineTenTest.TestUtilities;
 using Microsoft.AspNetCore.Mvc;
-using ICreateOrderService = LineTenTest.Api.Services.ICreateOrderService;
 
 namespace LineTenTest.Api.Tests.Services
 {
