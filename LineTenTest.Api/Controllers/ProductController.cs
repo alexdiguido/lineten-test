@@ -52,7 +52,8 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ProductDto>> Update(UpdateProductRequest updateOrderRequest)
         {
-            throw new NotImplementedException();
+            return await HandleOrderOperationAsync(async () =>
+                await _mediator.Send(new UpdateProductCommand(updateOrderRequest)));
         }
 
         private async Task<ActionResult<ProductDto>> HandleOrderOperationAsync(
