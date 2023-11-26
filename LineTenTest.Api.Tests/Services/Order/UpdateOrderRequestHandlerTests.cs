@@ -1,55 +1,53 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LineTenTest.Api.Services.Order;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
-using System.Threading.Tasks;
 using FluentAssertions;
-using LineTenTest.Api.Commands;
 using Moq.AutoMock;
 using Xunit;
+using LineTenTest.Api.Commands;
 using LineTenTest.Api.Dtos;
-using LineTenTest.Api.Queries;
-using LineTenTest.Api.Services.Order;
 using LineTenTest.Api.Utilities;
-using LineTenTest.Domain.Entities;
-using LineTenTest.Domain.Exceptions;
 using LineTenTest.Domain.Services.Order;
 using LineTenTest.SharedKernel.ApiModels;
 using LineTenTest.TestUtilities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LineTenTest.Api.Tests.Services
+namespace LineTenTest.Api.Tests.Services.Order
 {
-    public class CreateOrderRequestHandlerTests
+    public class UpdateOrderRequestHandlerTests
     {
         private AutoMocker _mockRepository = new();
 
-
-        private CreateOrderRequestHandler CreateCreateOrderRequestHandler()
+        private UpdateOrderRequestHandler CreateUpdateOrderRequestHandler()
         {
-            return _mockRepository.CreateInstance<CreateOrderRequestHandler>();
+            return _mockRepository.CreateInstance<UpdateOrderRequestHandler>();
         }
 
+       
        [Fact] 
        public async Task Handle_RequestIsValid_DomainServiceReturnOrderEntity_ShouldReturnOkObjectResultWithOrderDataDto()
         {
             // Arrange
-            var createOrderRequestHandler = CreateCreateOrderRequestHandler();
+            var requestHandler = CreateUpdateOrderRequestHandler();
 
-            var request = new CreateOrderRequest()
+            var request = new UpdateOrderRequest()
             {
+                OrderId = 1,
+                Status = 3,
                 CustomerId = 1,
                 ProductId = 1
             };
 
-            var command = new CreateOrderCommand(request);
+            var command = new UpdateOrderCommand(request);
             CancellationToken cancellationToken = default;
             Domain.Entities.Order orderEntity = OrderBuilder.CreateDefault();
 
-            _mockRepository.GetMock<ICreateOrderService>().Setup(s => s.CreateAsync(request))
+            _mockRepository.GetMock<IUpdateOrderService>().Setup(s => s.UpdateAsync(request))
                 .ReturnsAsync(orderEntity);
 
             // Act
-            var result = await createOrderRequestHandler.Handle(command, cancellationToken);
+            var result = await requestHandler.Handle(command, cancellationToken);
 
             // Assert
             var objectResult = result.Result as OkObjectResult;
@@ -65,22 +63,24 @@ namespace LineTenTest.Api.Tests.Services
         [Fact] public async Task Handle_RequestIsValid_DomainServiceThrowException_ShouldReturnInternalServerErrorResult()
         {
             // Arrange
-            var createOrderRequestHandler = CreateCreateOrderRequestHandler();
-            var request = new CreateOrderRequest()
+            var updateOrderRequestHandler = CreateUpdateOrderRequestHandler();
+            var request = new UpdateOrderRequest()
             {
                 CustomerId = 1,
-                ProductId = 1
+                ProductId = 1,
+                Status = 3,
+                OrderId = 1,
             };
 
-            var command = new CreateOrderCommand(request);
+            var command = new UpdateOrderCommand(request);
             CancellationToken cancellationToken = default;
             var expectedStatus = 500;
             var exceptionMessage = "message";
-            _mockRepository.GetMock<ICreateOrderService>().Setup(s => s.CreateAsync(It.IsAny<CreateOrderRequest>()))
+            _mockRepository.GetMock<IUpdateOrderService>().Setup(s => s.UpdateAsync(It.IsAny<UpdateOrderRequest>()))
                 .ThrowsAsync(new Exception(exceptionMessage));
 
             // Act
-            var result = await createOrderRequestHandler.Handle(command, cancellationToken);
+            var result = await updateOrderRequestHandler.Handle(command, cancellationToken);
 
             // Assert
             result.Result.Should().BeOfType<ObjectResult>();
@@ -93,25 +93,29 @@ namespace LineTenTest.Api.Tests.Services
         }
 
         [Theory]
-        [InlineData(-1,-1)]
-        [InlineData(1,-1)]
-        [InlineData(-1,1)]
-        public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult(int customerId, int productId)
+        [InlineData(-1,-1,1,1)]
+        [InlineData(1,-1,1,1)]
+        [InlineData(-1,1,1,1)]
+        [InlineData(1,1,100,1)]
+        [InlineData(1,1,1, -1)]
+        public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult(int customerId, int productId, int status, int orderId)
         {
             // Arrange
-            var createOrderRequestHandler = CreateCreateOrderRequestHandler();
-            var request = new CreateOrderRequest()
+            var requestHandler = CreateUpdateOrderRequestHandler();
+            var request = new UpdateOrderRequest()
             {
                 CustomerId = customerId,
-                ProductId = productId
+                ProductId = productId,
+                Status = status,
+                OrderId = orderId
             };
 
-            var command = new CreateOrderCommand(request);
+            var command = new UpdateOrderCommand(request);
             CancellationToken cancellationToken = default;
             var expectedStatus = 400;
 
             // Act
-            var result = await createOrderRequestHandler.Handle(command, cancellationToken);
+            var result = await requestHandler.Handle(command, cancellationToken);
 
             // Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>();
@@ -126,14 +130,14 @@ namespace LineTenTest.Api.Tests.Services
         public async Task Handle_RequestIsNull_ShouldReturnBadRequestResult()
         {
             // Arrange
-            var createOrderRequestHandler = CreateCreateOrderRequestHandler();
+            var requestHandler = CreateUpdateOrderRequestHandler();
 
-            var command = new CreateOrderCommand(null);
+            var command = new UpdateOrderCommand(null);
             CancellationToken cancellationToken = default;
             var expectedStatus = 400;
 
             // Act
-            var result = await createOrderRequestHandler.Handle(command, cancellationToken);
+            var result = await requestHandler.Handle(command, cancellationToken);
 
             // Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>();

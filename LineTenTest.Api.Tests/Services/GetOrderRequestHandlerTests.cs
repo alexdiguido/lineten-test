@@ -19,12 +19,7 @@ namespace LineTenTest.Api.Tests.Services
 {
     public class GetOrderRequestHandlerTests
     {
-        private AutoMocker _mockRepository;
-
-        public GetOrderRequestHandlerTests()
-        {
-            _mockRepository = new AutoMocker();
-        }
+        private AutoMocker _mockRepository = new();
 
         private GetOrderRequestHandler CreateGetOrderRequestHandler()
         {
@@ -38,7 +33,7 @@ namespace LineTenTest.Api.Tests.Services
             int orderId = 1;
             GetOrderByIdQuery request = new GetOrderByIdQuery(orderId);
             CancellationToken cancellationToken = default;
-            Order orderEntity = OrderBuilder.CreateDefault();
+            Domain.Entities.Order orderEntity = OrderBuilder.CreateDefault();
 
             _mockRepository.GetMock<IGetOrderService>().Setup(s => s.GetAsync(orderId))
                 .ReturnsAsync(orderEntity);
