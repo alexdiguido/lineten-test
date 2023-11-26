@@ -1,7 +1,9 @@
 ﻿using LineTenTest.Api.Controllers;
 using System;
 using FluentAssertions;
+using LineTenTest.Api.Dtos;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
@@ -29,7 +31,13 @@ namespace LineTenTest.Api.Tests.Controllers
             // Arrange
             int orderId = 1;
             var orderController = CreateService();
+            var query = new GetByOrderIdQuery(orderId);
+            var expectedDto = new OrderDto
+            {
+                OrderId = orderId
+            };
 
+            _mockMediator.Setup(expression: m => m.Send(query, It.IsAny<CancellationToken>())).ReturnsAsync(new OkObjectResult(expectedDto));
             // Act
             var result = await orderController.Get(orderId);
 

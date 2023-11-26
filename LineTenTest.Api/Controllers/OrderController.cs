@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using LineTenTest.Api.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,7 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int orderId)
+        public async Task<ActionResult<OrderDto>> Get(int orderId)
         {
             throw new NotImplementedException();
         }
