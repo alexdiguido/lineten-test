@@ -23,7 +23,26 @@ namespace LineTenTest.Api.Services.Order
 
         public async Task<IActionResult> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Guard.Against.Null(request.Request);
+                Guard.Against.Negative(request.Request.OrderId);
+                await _service.DeleteAsync(request.Request);
+            }
+            catch (ArgumentException argumentEx)
+            {
+                return new BadRequestObjectResult(argumentEx.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, request);
+                return new ObjectResult(Constants.InternalServerErrorResultMessage)
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
+            }
+
+            return new OkResult();
         }
     }
 }
