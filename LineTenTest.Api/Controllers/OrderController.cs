@@ -27,18 +27,8 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<OrderDto>> Get(int orderId)
         {
-            ActionResult<OrderDto> response;
-            try
-            {
-                response = await _mediator.Send(new GetOrderByIdQuery(orderId));
-            }
-            catch (Exception ex)
-            {
-                var message = "an error occurred. Please contact Application admin";
-                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
-            }
-
-            return response;
+            return await HandleOrderOperationAsync(async () =>
+                await _mediator.Send(new GetOrderByIdQuery(orderId)));
         }
 
         [HttpPost]
@@ -48,18 +38,22 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<OrderDto>> Create(CreateOrderDto createOrderDto)
         {
-            ActionResult<OrderDto> response;
+            return await HandleOrderOperationAsync(async () =>
+                await _mediator.Send(new CreateOrderCommand(createOrderDto)));
+        }
+
+        public async Task<ActionResult<OrderDto>> HandleOrderOperationAsync(
+            Func<Task<ActionResult<OrderDto>>> operation)
+        {
             try
             {
-                response = await _mediator.Send(new CreateOrderCommand(createOrderDto));
+                return await operation.Invoke();
             }
             catch (Exception ex)
             {
                 var message = "an error occurred. Please contact Application admin";
                 return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
             }
-
-            return response;
         }
     }
 }
