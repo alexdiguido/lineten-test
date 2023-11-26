@@ -257,7 +257,7 @@ namespace LineTenTest.Api.Tests.Controllers
             var expectedStatusCode = 500;
             var expectedMessage = ExceptionMessage;
 
-            _mockMediator.Setup(expression: m => m.Send(It.IsAny<UpdateOrderCommand>(),It.IsAny<CancellationToken>()))
+            _mockMediator.Setup(expression: m => m.Send(It.IsAny<DeleteOrderCommand>(),It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("exception message with internal stacktrace"));
             // Act
             var result = await orderController.Delete(updateOrderRequest);

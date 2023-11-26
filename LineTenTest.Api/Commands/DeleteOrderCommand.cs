@@ -1,6 +1,11 @@
-﻿namespace LineTenTest.Api.Tests.Controllers;
+﻿using LineTenTest.Api.ApiModels;
+using LineTenTest.Api.Dtos;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
-public class DeleteOrderCommand
+namespace LineTenTest.Api.Commands;
+
+public class DeleteOrderCommand : IRequest<ActionResult<OrderDto>>
 {
     public DeleteOrderRequest Request { get; }
 
