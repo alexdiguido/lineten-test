@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.Domain", "LineT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.Domain.Tests", "LineTenTest.Domain.Tests\LineTenTest.Domain.Tests.csproj", "{2CF3DE47-1617-485E-B8F6-536A0C41BC66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.SharedKernel", "LineTenTest.SharedKernel\LineTenTest.SharedKernel.csproj", "{A309E0B7-9A9F-48EF-BF8C-3B91F5E023DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.SharedKernel", "LineTenTest.SharedKernel\LineTenTest.SharedKernel.csproj", "{A309E0B7-9A9F-48EF-BF8C-3B91F5E023DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.Infrastructure", "LineTenTest.Infrastructure\LineTenTest.Infrastructure.csproj", "{EE35781D-8297-4270-A6B4-CBBB32DE9556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.Infrastructure", "LineTenTest.Infrastructure\LineTenTest.Infrastructure.csproj", "{EE35781D-8297-4270-A6B4-CBBB32DE9556}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.Api.Tests", "LineTenTest.Api.Tests\LineTenTest.Api.Tests.csproj", "{CE0CD0C5-6AD2-4705-B56B-434B910CE9BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{EE35781D-8297-4270-A6B4-CBBB32DE9556}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE35781D-8297-4270-A6B4-CBBB32DE9556}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE35781D-8297-4270-A6B4-CBBB32DE9556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE0CD0C5-6AD2-4705-B56B-434B910CE9BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE0CD0C5-6AD2-4705-B56B-434B910CE9BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE0CD0C5-6AD2-4705-B56B-434B910CE9BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE0CD0C5-6AD2-4705-B56B-434B910CE9BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
