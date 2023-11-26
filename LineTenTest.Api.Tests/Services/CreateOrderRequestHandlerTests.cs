@@ -93,17 +93,43 @@ namespace LineTenTest.Api.Tests.Services
             _mockRepository.VerifyAll();
         }
 
-        [Fact] public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult()
+        [Theory]
+        [InlineData(-1,-1)]
+        [InlineData(1,-1)]
+        [InlineData(-1,1)]
+        public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult(int customerId, int productId)
         {
             // Arrange
             var createOrderRequestHandler = CreateCreateOrderRequestHandler();
             var request = new CreateOrderRequest()
             {
-                CustomerId = 1,
-                ProductId = 1
+                CustomerId = customerId,
+                ProductId = productId
             };
 
             var command = new CreateOrderCommand(request);
+            CancellationToken cancellationToken = default;
+            var expectedStatus = 400;
+
+            // Act
+            var result = await createOrderRequestHandler.Handle(command, cancellationToken);
+
+            // Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
+            var objectResult = result.Result as BadRequestObjectResult;
+
+            objectResult.StatusCode.Should().Be(expectedStatus);
+
+            _mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public async Task Handle_RequestIsNull_ShouldReturnBadRequestResult()
+        {
+            // Arrange
+            var createOrderRequestHandler = CreateCreateOrderRequestHandler();
+
+            var command = new CreateOrderCommand(null);
             CancellationToken cancellationToken = default;
             var expectedStatus = 400;
 
