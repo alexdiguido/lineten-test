@@ -17,7 +17,7 @@ using LineTenTest.SharedKernel.ApiModels;
 using LineTenTest.TestUtilities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LineTenTest.Api.Tests.Services
+namespace LineTenTest.Api.Tests.Services.Order
 {
     public class CreateOrderRequestHandlerTests
     {
@@ -29,8 +29,8 @@ namespace LineTenTest.Api.Tests.Services
             return _mockRepository.CreateInstance<CreateOrderRequestHandler>();
         }
 
-       [Fact] 
-       public async Task Handle_RequestIsValid_DomainServiceReturnOrderEntity_ShouldReturnOkObjectResultWithOrderDataDto()
+        [Fact]
+        public async Task Handle_RequestIsValid_DomainServiceReturnOrderEntity_ShouldReturnOkObjectResultWithOrderDataDto()
         {
             // Arrange
             var createOrderRequestHandler = CreateCreateOrderRequestHandler();
@@ -62,7 +62,8 @@ namespace LineTenTest.Api.Tests.Services
             _mockRepository.VerifyAll();
         }
 
-        [Fact] public async Task Handle_RequestIsValid_DomainServiceThrowException_ShouldReturnInternalServerErrorResult()
+        [Fact]
+        public async Task Handle_RequestIsValid_DomainServiceThrowException_ShouldReturnInternalServerErrorResult()
         {
             // Arrange
             var createOrderRequestHandler = CreateCreateOrderRequestHandler();
@@ -93,9 +94,9 @@ namespace LineTenTest.Api.Tests.Services
         }
 
         [Theory]
-        [InlineData(-1,-1)]
-        [InlineData(1,-1)]
-        [InlineData(-1,1)]
+        [InlineData(-1, -1)]
+        [InlineData(1, -1)]
+        [InlineData(-1, 1)]
         public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult(int customerId, int productId)
         {
             // Arrange

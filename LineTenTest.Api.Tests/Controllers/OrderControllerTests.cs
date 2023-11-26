@@ -239,7 +239,7 @@ namespace LineTenTest.Api.Tests.Controllers
             // Act
             var result = await orderController.Delete(deleteOrderRequest);
 
-            var objectResult = result.Result as OkObjectResult;
+            var objectResult = result as OkObjectResult;
 
             // Assert
             objectResult.StatusCode.Should().Be(expectedStatusCode);
@@ -262,7 +262,7 @@ namespace LineTenTest.Api.Tests.Controllers
             // Act
             var result = await orderController.Delete(updateOrderRequest);
 
-            var objectResult = result.Result as ObjectResult;
+            var objectResult = result as ObjectResult;
             // Assert
             
             objectResult.StatusCode.Should().Be(expectedStatusCode);

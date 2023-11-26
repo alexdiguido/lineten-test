@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LineTenTest.Api.Commands;
 
-public class DeleteOrderCommand : IRequest<ActionResult<OrderDto>>
+public class DeleteOrderCommand : IRequest<IActionResult>
 {
     public DeleteOrderRequest Request { get; }
 

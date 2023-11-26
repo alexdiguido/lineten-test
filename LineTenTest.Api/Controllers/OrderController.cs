@@ -61,10 +61,17 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Delete([FromQuery]DeleteOrderRequest deleteOrderRequest)
+        public async Task<IActionResult> Delete([FromQuery]DeleteOrderRequest deleteOrderRequest)
         {
-            return await HandleOrderOperationAsync(async () =>
-                await _mediator.Send(new DeleteOrderCommand(deleteOrderRequest)));
+            try
+            {
+                return await _mediator.Send(new DeleteOrderCommand(deleteOrderRequest));
+            }
+            catch (Exception ex)
+            {
+                var message = "an error occurred. Please contact Application admin";
+                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
+            }
         }
 
         private async Task<ActionResult<OrderDto>> HandleOrderOperationAsync(

@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq.AutoMock;
 using Xunit;
 
-namespace LineTenTest.Api.Tests.Services
+namespace LineTenTest.Api.Tests.Services.Order
 {
     public class GetOrderRequestHandlerTests
     {
@@ -26,7 +26,8 @@ namespace LineTenTest.Api.Tests.Services
             return _mockRepository.CreateInstance<GetOrderRequestHandler>();
         }
 
-        [Fact] public async Task Handle_RequestIsValid_DomainServiceReturnOrderEntity_ShouldReturnOkObjectResultWithOrderDataDto()
+        [Fact]
+        public async Task Handle_RequestIsValid_DomainServiceReturnOrderEntity_ShouldReturnOkObjectResultWithOrderDataDto()
         {
             // Arrange
             var getOrderRequestHandler = CreateGetOrderRequestHandler();
@@ -52,7 +53,8 @@ namespace LineTenTest.Api.Tests.Services
             _mockRepository.VerifyAll();
         }
 
-        [Fact] public async Task Handle_RequestIsValid_OrderNotFound_ShouldReturnNotFoundResult()
+        [Fact]
+        public async Task Handle_RequestIsValid_OrderNotFound_ShouldReturnNotFoundResult()
         {
             // Arrange
             var getOrderRequestHandler = CreateGetOrderRequestHandler();
@@ -73,7 +75,8 @@ namespace LineTenTest.Api.Tests.Services
             _mockRepository.VerifyAll();
         }
 
-        [Fact] public async Task Handle_RequestIsValid_DomainServiceThrowException_ShouldReturnInternalServerErrorResult()
+        [Fact]
+        public async Task Handle_RequestIsValid_DomainServiceThrowException_ShouldReturnInternalServerErrorResult()
         {
             // Arrange
             var getOrderRequestHandler = CreateGetOrderRequestHandler();
@@ -98,7 +101,8 @@ namespace LineTenTest.Api.Tests.Services
             _mockRepository.VerifyAll();
         }
 
-        [Fact] public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult()
+        [Fact]
+        public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult()
         {
             // Arrange
             var getOrderRequestHandler = CreateGetOrderRequestHandler();
