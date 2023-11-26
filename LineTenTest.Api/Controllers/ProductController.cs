@@ -56,6 +56,15 @@ namespace LineTenTest.Api.Controllers
                 await _mediator.Send(new UpdateProductCommand(updateOrderRequest)));
         }
 
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete([FromQuery]DeleteProductRequest deleteProductRequest)
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<ActionResult<ProductDto>> HandleOrderOperationAsync(
             Func<Task<ActionResult<ProductDto>>> operation)
         {

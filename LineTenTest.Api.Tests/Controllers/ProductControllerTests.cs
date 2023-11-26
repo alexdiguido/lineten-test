@@ -137,7 +137,7 @@ namespace LineTenTest.Api.Tests.Controllers
             _mockRepository.VerifyAll();
         }
 
-          [Fact]
+        [Fact]
         public async Task Update_RequestIsValid_ShouldReturnOkActionResult()
         {
             // Arrange
@@ -197,6 +197,62 @@ namespace LineTenTest.Api.Tests.Controllers
                 .And.BeOfType<ObjectResult>();
 
             var objectResult = result.Result as ObjectResult;
+            
+            // Assert
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().Be(expectedMessage);
+            _mockRepository.VerifyAll();
+        }
+
+         [Fact]
+        public async Task Delete_RequestIsValid_ShouldReturnOkActionResult()
+        {
+            // Arrange
+            var productController = CreateProductController();
+            var productDto = ArrangeProductDto();
+            var deleteProductRequest = new DeleteProductRequest()
+            {
+                ProductId = 1,
+            };
+
+            var expectedStatusCode = 200;
+
+            _mockRepository.GetMock<IMediator>().Setup(expression: m => 
+                m.Send(It.Is<DeleteProductCommand>(q=> 
+                        q.Request.ProductId == deleteProductRequest.ProductId), 
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new OkObjectResult(productDto));
+            // Act
+            var result = await productController.Delete(deleteProductRequest);
+
+            var objectResult = result as OkObjectResult;
+
+            // Assert
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().Be(productDto);
+            _mockRepository.VerifyAll();
+        }
+
+        
+
+        [Fact]
+        public async Task Delete_MediatorThrowsException_ShouldReturnInternalServerErrorActionResult()
+        {
+            // Arrange
+            var productController = CreateProductController();
+            var updateProductRequest = new DeleteProductRequest() { };
+            var expectedStatusCode = 500;
+            var expectedMessage = $"an error occurred. Please contact Application admin";
+
+            _mockRepository.GetMock<IMediator>().Setup(expression: m => m.Send(It.IsAny<DeleteProductCommand>(),It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("exception message with internal stacktrace"));
+            // Act
+            var result = await productController.Delete(updateProductRequest);
+
+            result.Should().NotBeNull()
+                .And.BeOfType<ObjectResult>();
+
+            var objectResult = result as ObjectResult;
             
             // Assert
             objectResult.StatusCode.Should().Be(expectedStatusCode);
