@@ -25,7 +25,18 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<OrderDto>> Get(int orderId)
         {
-            return await _mediator.Send(new GetByOrderIdQuery(orderId));
+            ActionResult<OrderDto> response;
+            try
+            {
+                response = await _mediator.Send(new GetOrderByIdQuery(orderId));
+            }
+            catch (Exception ex)
+            {
+                var message = "an error occurred. Please contact Application admin";
+                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
+            }
+
+            return response;
         }
     }
 }
