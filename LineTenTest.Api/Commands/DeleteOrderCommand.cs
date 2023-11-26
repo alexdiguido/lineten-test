@@ -1,5 +1,5 @@
-﻿using LineTenTest.Api.ApiModels;
-using LineTenTest.Api.Dtos;
+﻿using LineTenTest.Api.Dtos;
+using LineTenTest.SharedKernel.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,10 +1,10 @@
 ﻿using LineTenTest.Api.Controllers;
 using System;
 using FluentAssertions;
-using LineTenTest.Api.ApiModels;
 using LineTenTest.Api.Commands;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.SharedKernel.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -80,7 +80,7 @@ namespace LineTenTest.Api.Tests.Controllers
             // Arrange
             int orderId = 1;
             var orderController = CreateService();
-            var createOrderDto = new CreateOrderDto
+            var createOrderDto = new CreateOrderRequest
             {
                 CustomerId = 11,
                 ProductId = 22
@@ -91,8 +91,8 @@ namespace LineTenTest.Api.Tests.Controllers
 
             _mockMediator.Setup(expression: m => 
                 m.Send(It.Is<CreateOrderCommand>(q=> 
-                    q.CreateOrderDto.ProductId == createOrderDto.ProductId && 
-                    q.CreateOrderDto.CustomerId == createOrderDto.CustomerId), 
+                    q.CreateOrderRequest.ProductId == createOrderDto.ProductId && 
+                    q.CreateOrderRequest.CustomerId == createOrderDto.CustomerId), 
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new OkObjectResult(orderDto));
             // Act
@@ -138,7 +138,7 @@ namespace LineTenTest.Api.Tests.Controllers
             // Arrange
             int orderId = 1;
             var orderController = CreateService();
-            var createOrderDto = new CreateOrderDto
+            var createOrderDto = new CreateOrderRequest
             {
                 CustomerId = 11,
                 ProductId = 22

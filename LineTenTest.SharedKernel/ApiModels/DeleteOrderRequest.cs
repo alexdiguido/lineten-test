@@ -1,4 +1,4 @@
-﻿namespace LineTenTest.Api.ApiModels;
+﻿namespace LineTenTest.SharedKernel.ApiModels;
 
 public class DeleteOrderRequest
 {

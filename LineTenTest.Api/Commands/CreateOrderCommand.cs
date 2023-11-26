@@ -1,5 +1,5 @@
-﻿using LineTenTest.Api.ApiModels;
-using LineTenTest.Api.Dtos;
+﻿using LineTenTest.Api.Dtos;
+using LineTenTest.SharedKernel.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +7,10 @@ namespace LineTenTest.Api.Commands;
 
 public class CreateOrderCommand : IRequest<ActionResult<OrderDto>>
 {
-    public CreateOrderDto CreateOrderDto { get; }
+    public CreateOrderRequest CreateOrderRequest { get; }
 
-    public CreateOrderCommand(CreateOrderDto createOrderDto)
+    public CreateOrderCommand(CreateOrderRequest createOrderRequest)
     {
-        CreateOrderDto = createOrderDto;
+        CreateOrderRequest = createOrderRequest;
     }
 }

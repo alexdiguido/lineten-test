@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using Asp.Versioning;
-using LineTenTest.Api.ApiModels;
 using LineTenTest.Api.Commands;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.SharedKernel.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,10 +38,10 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Create(CreateOrderDto createOrderDto)
+        public async Task<ActionResult<OrderDto>> Create(CreateOrderRequest createOrderRequest)
         {
             return await HandleOrderOperationAsync(async () =>
-                await _mediator.Send(new CreateOrderCommand(createOrderDto)));
+                await _mediator.Send(new CreateOrderCommand(createOrderRequest)));
         }
 
         [HttpPut]
