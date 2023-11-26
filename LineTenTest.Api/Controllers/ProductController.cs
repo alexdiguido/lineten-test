@@ -62,7 +62,15 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromQuery]DeleteProductRequest deleteProductRequest)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _mediator.Send(new DeleteProductCommand(deleteProductRequest));
+            }
+            catch (Exception ex)
+            {
+                var message = "an error occurred. Please contact Application admin";
+                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
+            }
         }
 
         private async Task<ActionResult<ProductDto>> HandleOrderOperationAsync(
