@@ -3,6 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using LineTenTest.Api.Queries;
+using LineTenTest.Api.Commands;
+using LineTenTest.SharedKernel.ApiModels;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Server.IIS.Core;
 
 namespace LineTenTest.Api.Controllers
 {
@@ -26,6 +30,16 @@ namespace LineTenTest.Api.Controllers
         {
             return await HandleOrderOperationAsync(async () =>
                 await _mediator.Send(new GetProductByIdQuery(productId)));
+        }
+
+        [HttpPost]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<OrderDto>> Create(CreateProductRequest createOrderRequest)
+        {
+            throw new NotImplementedException();
         }
 
         private async Task<ActionResult<OrderDto>> HandleOrderOperationAsync(
