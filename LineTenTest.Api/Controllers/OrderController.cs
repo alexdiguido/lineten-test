@@ -38,5 +38,10 @@ namespace LineTenTest.Api.Controllers
 
             return response;
         }
+
+        public async Task<ActionResult<OrderDto>> Create(CreateOrderDto createOrderDto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
