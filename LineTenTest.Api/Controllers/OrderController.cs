@@ -1,9 +1,10 @@
-﻿using System.Net.Mime;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 using Asp.Versioning;
-using LineTenTest.Api.ApiModels;
 using LineTenTest.Api.Commands;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.SharedKernel.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,7 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Get(int orderId)
+        public async Task<ActionResult<OrderDto>> Get([Required]int orderId)
         {
             return await HandleOrderOperationAsync(async () =>
                 await _mediator.Send(new GetOrderByIdQuery(orderId)));
@@ -37,10 +38,10 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Create(CreateOrderDto createOrderDto)
+        public async Task<ActionResult<OrderDto>> Create(CreateOrderRequest createOrderRequest)
         {
             return await HandleOrderOperationAsync(async () =>
-                await _mediator.Send(new CreateOrderCommand(createOrderDto)));
+                await _mediator.Send(new CreateOrderCommand(createOrderRequest)));
         }
 
         [HttpPut]
@@ -60,10 +61,17 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Delete([FromQuery]DeleteOrderRequest deleteOrderRequest)
+        public async Task<IActionResult> Delete([FromQuery]DeleteOrderRequest deleteOrderRequest)
         {
-            return await HandleOrderOperationAsync(async () =>
-                await _mediator.Send(new DeleteOrderCommand(deleteOrderRequest)));
+            try
+            {
+                return await _mediator.Send(new DeleteOrderCommand(deleteOrderRequest));
+            }
+            catch (Exception ex)
+            {
+                var message = "an error occurred. Please contact Application admin";
+                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
+            }
         }
 
         private async Task<ActionResult<OrderDto>> HandleOrderOperationAsync(

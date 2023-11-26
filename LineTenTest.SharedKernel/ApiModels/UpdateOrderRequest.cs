@@ -1,8 +1,4 @@
-﻿using LineTenTest.Api.Dtos;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-namespace LineTenTest.Api.ApiModels;
+﻿namespace LineTenTest.SharedKernel.ApiModels;
 
 public class UpdateOrderRequest
 {

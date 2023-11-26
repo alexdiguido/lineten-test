@@ -1,6 +1,6 @@
-﻿namespace LineTenTest.Api.ApiModels;
+﻿namespace LineTenTest.SharedKernel.ApiModels;
 
-public class CreateOrderDto
+public class CreateOrderRequest
 {
     public int CustomerId { get; set; }
     public int ProductId { get; set; }
