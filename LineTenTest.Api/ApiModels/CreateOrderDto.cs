@@ -1,4 +1,4 @@
-﻿namespace LineTenTest.Api.Dtos;
+﻿namespace LineTenTest.Api.ApiModels;
 
 public class CreateOrderDto
 {

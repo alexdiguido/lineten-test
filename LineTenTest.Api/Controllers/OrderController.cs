@@ -1,8 +1,10 @@
 ﻿using System.Net.Mime;
 using Asp.Versioning;
+using LineTenTest.Api.ApiModels;
 using LineTenTest.Api.Commands;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.Api.Tests.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +44,20 @@ namespace LineTenTest.Api.Controllers
                 await _mediator.Send(new CreateOrderCommand(createOrderDto)));
         }
 
-        public async Task<ActionResult<OrderDto>> HandleOrderOperationAsync(
+        [HttpPut]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public async Task<ActionResult<OrderDto>> Update(UpdateOrderRequest updateOrderRequest)
+        {
+            return await HandleOrderOperationAsync(async () =>
+                await _mediator.Send(new UpdateOrderCommand(updateOrderRequest)));
+        }
+
+        private async Task<ActionResult<OrderDto>> HandleOrderOperationAsync(
             Func<Task<ActionResult<OrderDto>>> operation)
         {
             try
@@ -54,6 +69,11 @@ namespace LineTenTest.Api.Controllers
                 var message = "an error occurred. Please contact Application admin";
                 return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
             }
+        }
+
+        public async Task<ActionResult<OrderDto>> Delete(DeleteOrderRequest deleteOrderRequest)
+        {
+            throw new NotImplementedException();
         }
     }
 }
