@@ -1,9 +1,15 @@
-﻿namespace LineTenTest.Api.Tests.Controllers;
+﻿using LineTenTest.Api.Dtos;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
-public class GetByOrderIdQuery
+namespace LineTenTest.Api.Queries;
+
+public class GetByOrderIdQuery : IRequest<ActionResult<OrderDto>>
 {
+    public int OrderId { get; }
+
     public GetByOrderIdQuery(int orderId)
     {
-        throw new NotImplementedException();
+        OrderId = orderId;
     }
 }

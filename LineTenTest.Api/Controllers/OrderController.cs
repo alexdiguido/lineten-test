@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using LineTenTest.Api.Dtos;
+using LineTenTest.Api.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,7 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<OrderDto>> Get(int orderId)
         {
-            throw new NotImplementedException();
+            return await _mediator.Send(new GetByOrderIdQuery(orderId));
         }
     }
 }
