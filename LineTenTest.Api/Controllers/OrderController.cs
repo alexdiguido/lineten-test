@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LineTenTest.Api.Controllers
@@ -8,6 +9,13 @@ namespace LineTenTest.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class OrderController : Controller
     {
+        private readonly IMediator _mediator;
+
+        public OrderController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
