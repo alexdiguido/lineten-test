@@ -137,6 +137,73 @@ namespace LineTenTest.Api.Tests.Controllers
             _mockRepository.VerifyAll();
         }
 
+          [Fact]
+        public async Task Update_RequestIsValid_ShouldReturnOkActionResult()
+        {
+            // Arrange
+            var productController = CreateProductController();
+            var productDto = ArrangeProductDto();
+            var updateProductRequest = new UpdateProductRequest()
+            {
+                ProductId = 1,
+                Sku = "sku",
+                Name = "name",
+                Description = "description"
+            };
+
+            var expectedStatusCode = 200;
+
+            _mockRepository.GetMock<IMediator>().Setup(expression: m => 
+                m.Send(It.Is<UpdateProductCommand>(q=> q.Request.ProductId == updateProductRequest.ProductId &&
+                                                       q.Request.Name == updateProductRequest.Name && 
+                                                       q.Request.Sku == updateProductRequest.Sku &&
+                                                       q.Request.Description == updateProductRequest.Description), 
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new OkObjectResult(productDto));
+            // Act
+            var result = await productController.Update(updateProductRequest);
+
+            var objectResult = result.Result as OkObjectResult;
+
+            // Assert
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().Be(productDto);
+            _mockRepository.VerifyAll();
+        }
+
+        
+
+        [Fact]
+        public async Task Update_MediatorThrowsException_ShouldReturnInternalServerErrorActionResult()
+        {
+            // Arrange
+            var productController = CreateProductController();
+            var updateProductRequest = new UpdateProductRequest()
+            {
+                Sku = "sku",
+                Name = "name",
+                Description = "description"
+            };
+            var expectedStatusCode = 500;
+            var expectedMessage = $"an error occurred. Please contact Application admin";
+
+            _mockRepository.GetMock<IMediator>().Setup(expression: m => m.Send(It.IsAny<UpdateProductCommand>(),It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("exception message with internal stacktrace"));
+            // Act
+            var result = await productController.Update(updateProductRequest);
+
+            result.Should().NotBeNull();
+            result.Result.Should().NotBeNull()
+                .And.BeOfType<ObjectResult>();
+
+            var objectResult = result.Result as ObjectResult;
+            
+            // Assert
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().Be(expectedMessage);
+            _mockRepository.VerifyAll();
+        }
+
         private static ProductDto ArrangeProductDto()
         {
             return new ProductDto()

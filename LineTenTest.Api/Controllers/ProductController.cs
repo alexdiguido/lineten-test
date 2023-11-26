@@ -44,6 +44,17 @@ namespace LineTenTest.Api.Controllers
                 await _mediator.Send(new CreateProductCommand(createOrderRequest)));
         }
 
+        
+        [HttpPut]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ProductDto>> Update(UpdateProductRequest updateOrderRequest)
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<ActionResult<ProductDto>> HandleOrderOperationAsync(
             Func<Task<ActionResult<ProductDto>>> operation)
         {
