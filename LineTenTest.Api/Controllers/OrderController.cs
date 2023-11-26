@@ -1,4 +1,6 @@
-﻿using Asp.Versioning;
+﻿using System.Net.Mime;
+using Asp.Versioning;
+using LineTenTest.Api.Commands;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
 using MediatR;
@@ -39,9 +41,25 @@ namespace LineTenTest.Api.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<OrderDto>> Create(CreateOrderDto createOrderDto)
         {
-            throw new NotImplementedException();
+            ActionResult<OrderDto> response;
+            try
+            {
+                response = await _mediator.Send(new CreateOrderCommand(createOrderDto));
+            }
+            catch (Exception ex)
+            {
+                var message = "an error occurred. Please contact Application admin";
+                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
+            }
+
+            return response;
         }
     }
 }

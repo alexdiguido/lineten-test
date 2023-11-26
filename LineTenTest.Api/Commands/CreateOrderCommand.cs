@@ -1,8 +1,10 @@
 ﻿using LineTenTest.Api.Dtos;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LineTenTest.Api.Commands;
 
-public class CreateOrderCommand
+public class CreateOrderCommand : IRequest<ActionResult<OrderDto>>
 {
     public CreateOrderDto CreateOrderDto { get; }
 
