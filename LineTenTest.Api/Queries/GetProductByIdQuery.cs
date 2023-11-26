@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LineTenTest.Api.Queries;
 
-public class GetProductByIdQuery : IRequest<ActionResult<OrderDto>>
+public class GetProductByIdQuery : IRequest<ActionResult<ProductDto>>
 {
     public int ProductId { get; }
 

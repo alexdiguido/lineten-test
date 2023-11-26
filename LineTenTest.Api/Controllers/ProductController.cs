@@ -7,6 +7,7 @@ using LineTenTest.Api.Commands;
 using LineTenTest.SharedKernel.ApiModels;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Server.IIS.Core;
+using LineTenTest.Domain.Entities;
 
 namespace LineTenTest.Api.Controllers
 {
@@ -26,7 +27,7 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Get([Required]int productId)
+        public async Task<ActionResult<ProductDto>> Get([Required]int productId)
         {
             return await HandleOrderOperationAsync(async () =>
                 await _mediator.Send(new GetProductByIdQuery(productId)));
@@ -37,13 +38,14 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Create(CreateProductRequest createOrderRequest)
+        public async Task<ActionResult<ProductDto>> Create(CreateProductRequest createOrderRequest)
         {
-            throw new NotImplementedException();
+            return await HandleOrderOperationAsync(async () =>
+                await _mediator.Send(new CreateProductCommand(createOrderRequest)));
         }
 
-        private async Task<ActionResult<OrderDto>> HandleOrderOperationAsync(
-            Func<Task<ActionResult<OrderDto>>> operation)
+        private async Task<ActionResult<ProductDto>> HandleOrderOperationAsync(
+            Func<Task<ActionResult<ProductDto>>> operation)
         {
             try
             {

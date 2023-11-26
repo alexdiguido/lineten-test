@@ -120,7 +120,7 @@ namespace LineTenTest.Api.Tests.Controllers
             var expectedStatusCode = 500;
             var expectedMessage = $"an error occurred. Please contact Application admin";
 
-            _mockRepository.GetMock<IMediator>().Setup(expression: m => m.Send(It.IsAny<CreateOrderCommand>(),It.IsAny<CancellationToken>()))
+            _mockRepository.GetMock<IMediator>().Setup(expression: m => m.Send(It.IsAny<CreateProductCommand>(),It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("exception message with internal stacktrace"));
             // Act
             var result = await productController.Create(createProductRequest);
