@@ -12,43 +12,19 @@ using NotFoundException = LineTenTest.Domain.Exceptions.NotFoundException;
 
 namespace LineTenTest.Api.Services
 {
-    public class GetOrderRequestHandler : IRequestHandler<GetOrderByIdQuery,ActionResult<OrderDto>>
+    public class GetOrderRequestHandler : BaseOrderRequestHandler<GetOrderByIdQuery>
     {
         private readonly IGetOrderService _service;
-        private readonly ILogger<GetOrderRequestHandler> _logger;
 
-        public GetOrderRequestHandler(IGetOrderService service, ILogger<GetOrderRequestHandler> logger)
+        public GetOrderRequestHandler(IGetOrderService service, ILogger<GetOrderRequestHandler> logger) : base(logger)
         {
             _service = service;
-            _logger = logger;
         }
 
-        public async Task<ActionResult<OrderDto>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
+        protected override Func<Task<Order>> ExecuteServiceOperation(GetOrderByIdQuery request)
         {
-            Order? orderResult;
-            try
-            {
-                Guard.Against.Negative(request.OrderId);
-                orderResult = await _service.GetAsync(request.OrderId);
-            }
-            catch (ArgumentException argumentEx)
-            {
-                return new BadRequestObjectResult(argumentEx.Message);
-            }
-            catch (NotFoundException ex)
-            {
-                return new NotFoundResult();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message,request.OrderId);
-                return new ObjectResult(Constants.InternalServerErrorResultMessage)
-                {
-                    StatusCode = (int)HttpStatusCode.InternalServerError
-                };
-            }
-            
-            return new OkObjectResult(OrderDtoMapper.MapFrom(orderResult));
+            Guard.Against.Negative(request.OrderId);
+            return async () => await _service.GetAsync(request.OrderId);
         }
     }
 }
