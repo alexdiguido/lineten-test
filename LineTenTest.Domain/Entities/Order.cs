@@ -17,7 +17,7 @@ namespace LineTenTest.Domain.Entities
 
         public Product Product { get; set; } = new Product();
         public Customer Customer { get; set; } = new Customer();
-        public string Status { get; set; } = string.Empty;
+        public int Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }

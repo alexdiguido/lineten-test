@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LineTenTest.Api\LineTenTest.Api.csproj" />
+    <ProjectReference Include="..\LineTenTest.TestUtilities\LineTenTest.TestUtilities.csproj" />
   </ItemGroup>
 
 </Project>

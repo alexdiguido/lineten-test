@@ -76,7 +76,7 @@ public class DatabaseFixture : IDisposable
                 {
                     CreatedDate = date.AddDays(i),
                     UpdatedDate = date.AddDays(i + 1),
-                    Status = "submitted",
+                    Status = (int)EOrderStatus.Pending,
                     Customer = customerList[i],
                     Product = productsList[i]
                 };

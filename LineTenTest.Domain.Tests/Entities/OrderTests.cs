@@ -14,7 +14,6 @@ namespace LineTenTest.Domain.Tests.Entities
             order.Should().NotBeNull();
             order.Product.Should().NotBeNull();
             order.Customer.Should().NotBeNull();
-            order.Status.Should().BeEmpty();
             order.CreatedDate.Should().Be(datetime);
             order.UpdatedDate.Should().Be(datetime);
         }
@@ -24,7 +23,7 @@ namespace LineTenTest.Domain.Tests.Entities
         {
             var createdDateTime = new DateTime();
             var updatedDateTime = createdDateTime.AddHours(1);
-            var status = "status";
+            var status = (int)EOrderStatus.Pending;
             var customer = new Customer();
             var product = new Product();
             var order = new Order()
