@@ -10,25 +10,23 @@ using LineTenTest.Api.Queries;
 using LineTenTest.Domain.Entities;
 using LineTenTest.TestUtilities;
 using Microsoft.AspNetCore.Mvc;
+using Moq.AutoMock;
 using Xunit;
 
 namespace LineTenTest.Api.Tests.Services
 {
     public class GetOrderRequestHandlerTests
     {
-        private MockRepository _mockRepository;
-        private Mock<IGetOrderService> _mockGetOrderService;
+        private AutoMocker _mockRepository;
 
         public GetOrderRequestHandlerTests()
         {
-            _mockRepository = new MockRepository(MockBehavior.Strict);
-
-            _mockGetOrderService = this._mockRepository.Create<IGetOrderService>();
+            _mockRepository = new AutoMocker();
         }
 
         private GetOrderRequestHandler CreateGetOrderRequestHandler()
         {
-            return new GetOrderRequestHandler(_mockGetOrderService.Object);
+            return _mockRepository.CreateInstance<GetOrderRequestHandler>();
         }
 
         [Fact] public async Task Handle_RequestIsValid_DomainServiceReturnOrderEntity_ShouldReturnOkObjectResultWithOrderDataDto()
@@ -40,7 +38,7 @@ namespace LineTenTest.Api.Tests.Services
             CancellationToken cancellationToken = default;
             Order orderEntity = OrderBuilder.CreateDefault();
 
-            _mockGetOrderService.Setup(s => s.GetAsync(orderId))
+            _mockRepository.GetMock<IGetOrderService>().Setup(s => s.GetAsync(orderId))
                 .ReturnsAsync(orderEntity);
 
             // Act
@@ -48,8 +46,10 @@ namespace LineTenTest.Api.Tests.Services
 
             // Assert
             var objectResult = result.Result as OkObjectResult;
-            objectResult.StatusCode.Should().Be(200);
-            var value = (OrderDto)objectResult.Value;
+            objectResult.Should().NotBeNull();
+            objectResult!.StatusCode.Should().Be(200);
+            objectResult.Value.Should().NotBeNull();
+            var value = (OrderDto)objectResult.Value!;
             value.ShouldBeEquivalentTo(orderEntity);
 
             _mockRepository.VerifyAll();
