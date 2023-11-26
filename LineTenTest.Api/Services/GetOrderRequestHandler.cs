@@ -1,10 +1,14 @@
-﻿using LineTenTest.Api.Dtos;
+﻿using System.Net;
+using Ardalis.GuardClauses;
+using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.Api.Utilities;
 using LineTenTest.Api.Utilities.Mappers;
-using LineTenTest.Domain.Exceptions;
+using LineTenTest.Domain.Entities;
 using LineTenTest.Domain.Services.Order;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NotFoundException = LineTenTest.Domain.Exceptions.NotFoundException;
 
 namespace LineTenTest.Api.Services
 {
@@ -21,8 +25,29 @@ namespace LineTenTest.Api.Services
 
         public async Task<ActionResult<OrderDto>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
         {
-            var orderResult = await _service.GetAsync(request.OrderId);
-
+            Order? orderResult;
+            try
+            {
+                Guard.Against.Negative(request.OrderId);
+                orderResult = await _service.GetAsync(request.OrderId);
+            }
+            catch (ArgumentException argumentEx)
+            {
+                return new BadRequestObjectResult(argumentEx.Message);
+            }
+            catch (NotFoundException ex)
+            {
+                return new NotFoundResult();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message,request.OrderId);
+                return new ObjectResult(Constants.InternalServerErrorResultMessage)
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
+            }
+            
             return new OkObjectResult(OrderDtoMapper.MapFrom(orderResult));
         }
     }
