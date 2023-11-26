@@ -7,7 +7,9 @@ using Ardalis.Specification;
 using FluentAssertions;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.Api.Utilities;
 using LineTenTest.Domain.Entities;
+using LineTenTest.Domain.Exceptions;
 using LineTenTest.TestUtilities;
 using Microsoft.AspNetCore.Mvc;
 using Moq.AutoMock;
@@ -51,6 +53,73 @@ namespace LineTenTest.Api.Tests.Services
             objectResult.Value.Should().NotBeNull();
             var value = (OrderDto)objectResult.Value!;
             value.ShouldBeEquivalentTo(orderEntity);
+
+            _mockRepository.VerifyAll();
+        }
+
+        [Fact] public async Task Handle_RequestIsValid_OrderNotFound_ShouldReturnNotFoundResult()
+        {
+            // Arrange
+            var getOrderRequestHandler = CreateGetOrderRequestHandler();
+            int orderId = 1;
+            GetOrderByIdQuery request = new GetOrderByIdQuery(orderId);
+            CancellationToken cancellationToken = default;
+
+            var exceptionMessage = "message";
+            _mockRepository.GetMock<IGetOrderService>().Setup(s => s.GetAsync(orderId))
+                .ThrowsAsync(new NotFoundException(exceptionMessage));
+
+            // Act
+            var result = await getOrderRequestHandler.Handle(request, cancellationToken);
+
+            // Assert
+            result.Result.Should().BeOfType<NotFoundResult>();
+
+            _mockRepository.VerifyAll();
+        }
+
+        [Fact] public async Task Handle_RequestIsValid_DomainServiceThrowException_ShouldReturnInternalServerErrorResult()
+        {
+            // Arrange
+            var getOrderRequestHandler = CreateGetOrderRequestHandler();
+            int orderId = 1;
+            GetOrderByIdQuery request = new GetOrderByIdQuery(orderId);
+            CancellationToken cancellationToken = default;
+            var expectedStatus = 500;
+            var exceptionMessage = "message";
+            _mockRepository.GetMock<IGetOrderService>().Setup(s => s.GetAsync(orderId))
+                .ThrowsAsync(new Exception(exceptionMessage));
+
+            // Act
+            var result = await getOrderRequestHandler.Handle(request, cancellationToken);
+
+            // Assert
+            result.Result.Should().BeOfType<ObjectResult>();
+            var objectResult = result.Result as ObjectResult;
+
+            objectResult.StatusCode.Should().Be(expectedStatus);
+            objectResult.Value.Should().Be(Constants.InternalServerErrorResultMessage);
+
+            _mockRepository.VerifyAll();
+        }
+
+        [Fact] public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult()
+        {
+            // Arrange
+            var getOrderRequestHandler = CreateGetOrderRequestHandler();
+            int orderId = -1;
+            GetOrderByIdQuery request = new GetOrderByIdQuery(orderId);
+            CancellationToken cancellationToken = default;
+            var expectedStatus = 400;
+
+            // Act
+            var result = await getOrderRequestHandler.Handle(request, cancellationToken);
+
+            // Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
+            var objectResult = result.Result as BadRequestObjectResult;
+
+            objectResult.StatusCode.Should().Be(expectedStatus);
 
             _mockRepository.VerifyAll();
         }

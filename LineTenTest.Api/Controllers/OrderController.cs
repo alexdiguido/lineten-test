@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 using Asp.Versioning;
 using LineTenTest.Api.ApiModels;
 using LineTenTest.Api.Commands;
@@ -26,7 +27,7 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<OrderDto>> Get(int orderId)
+        public async Task<ActionResult<OrderDto>> Get([Required]int orderId)
         {
             return await HandleOrderOperationAsync(async () =>
                 await _mediator.Send(new GetOrderByIdQuery(orderId)));
