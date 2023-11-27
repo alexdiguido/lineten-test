@@ -18,6 +18,11 @@ public class UpdateProductRequestHandler : BaseProductRequestHandler<UpdateProdu
 
     protected override Func<Task<Domain.Entities.Product>> ExecuteServiceOperation(UpdateProductCommand request)
     {
-       throw new NotImplementedException();
+        Guard.Against.Null(request.Request);
+        Guard.Against.NegativeOrZero(request.Request.ProductId);
+        Guard.Against.NullOrEmpty(request.Request.Description);
+        Guard.Against.NullOrEmpty(request.Request.Name);
+        Guard.Against.NullOrEmpty(request.Request.Sku);
+        return async() => await _service.UpdateAsync(request.Request);
     }
 }
