@@ -18,8 +18,4 @@
     <ProjectReference Include="..\LineTenTest.Domain\LineTenTest.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Customer\" />
-  </ItemGroup>
-
 </Project>

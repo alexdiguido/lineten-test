@@ -29,8 +29,4 @@
     <ProjectReference Include="..\LineTenTest.TestUtilities\LineTenTest.TestUtilities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Customer\" />
-  </ItemGroup>
-
 </Project>
