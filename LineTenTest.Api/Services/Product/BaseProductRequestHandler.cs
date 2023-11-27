@@ -48,8 +48,4 @@ namespace LineTenTest.Api.Services.Product
             return new OkObjectResult(ProductDtoMapper.MapFrom(productResult));
         }
     }
-
-    public class UpdateProductRequestHandler<TRequest> : BaseProductRequestHandler<TRequest> where TRequest : IRequest<ActionResult<ProductDto>>
-    {
-    }
 }
