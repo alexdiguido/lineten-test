@@ -2,6 +2,7 @@
 using LineTenTest.Api.Commands;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
+using LineTenTest.Domain.Entities;
 using LineTenTest.SharedKernel.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,8 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CustomerDto>> Get([Required]int customerId)
         {
-            throw new NotImplementedException();
+            return await HandleOperationAsync(async () =>
+                await _mediator.Send(new GetCustomerByIdQuery(customerId)));
         }
 
         [HttpPost]
@@ -39,9 +41,10 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CustomerDto>> Create(CreateCustomerRequest createOrderRequest)
+        public async Task<ActionResult<CustomerDto>> Create(CreateCustomerRequest createCustomerRequest)
         {
-            throw new NotImplementedException();
+            return await HandleOperationAsync(async () =>
+                await _mediator.Send(new CreateCustomerCommand(createCustomerRequest)));
         }
 
         [HttpPut]
@@ -49,18 +52,42 @@ namespace LineTenTest.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CustomerDto>> Update(UpdateCustomerRequest updateOrderRequest)
+        public async Task<ActionResult<CustomerDto>> Update(UpdateCustomerRequest updateCustomerRequest)
         {
-            throw new NotImplementedException();
+            return await HandleOperationAsync(async () =>
+                await _mediator.Send(new UpdateCustomerCommand(updateCustomerRequest)));
         }
 
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete([FromQuery]DeleteCustomerRequest deleteProductRequest)
+        public async Task<IActionResult> Delete([FromQuery]DeleteCustomerRequest deleteCustomerRequest)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _mediator.Send(new DeleteCustomerCommand(deleteCustomerRequest));
+            }
+            catch (Exception ex)
+            {
+                var message = "an error occurred. Please contact Application admin";
+                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
+            }
+        }
+
+        private async Task<ActionResult<CustomerDto>> HandleOperationAsync(
+            Func<Task<ActionResult<CustomerDto>>> operation)
+        {
+            try
+            {
+                return await operation.Invoke();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,ex.Message);
+                var message = "an error occurred. Please contact Application admin";
+                return new ObjectResult(message) { StatusCode = StatusCodes.Status500InternalServerError };
+            }
         }
     }
 }
