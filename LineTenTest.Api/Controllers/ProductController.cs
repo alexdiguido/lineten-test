@@ -8,9 +8,13 @@ using LineTenTest.SharedKernel.ApiModels;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using LineTenTest.Domain.Entities;
+using Asp.Versioning;
 
 namespace LineTenTest.Api.Controllers
 {
+    [ApiController]
+    [ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class ProductController : Controller
     {
         private readonly IMediator _mediator;
