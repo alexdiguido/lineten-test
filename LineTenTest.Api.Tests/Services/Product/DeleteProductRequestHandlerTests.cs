@@ -27,7 +27,7 @@ namespace LineTenTest.Api.Tests.Services.Product
         }
 
         [Fact]
-        public async Task Handle_RequestIsValid_DomainServiceReturnOk_ShouldReturnOkObjectResultWithOrderDataDto()
+        public async Task Handle_RequestIsValid_DomainServiceReturnOk_ShouldReturnOkResult()
         {
             // Arrange
             var deleteOrderRequestHandler = CreateDeleteProductRequestHandler();
@@ -36,7 +36,7 @@ namespace LineTenTest.Api.Tests.Services.Product
 
             var command = new DeleteProductCommand(request);
             CancellationToken cancellationToken = default;
-            Domain.Entities.Product orderEntity = ProductBuilder.CreateDefault();
+            Domain.Entities.Product productEntity = ProductBuilder.CreateDefault();
 
             _mockRepository.GetMock<IDeleteProductService>().Setup(s => s.DeleteAsync(request))
                 .Returns(Task.CompletedTask);
@@ -65,7 +65,7 @@ namespace LineTenTest.Api.Tests.Services.Product
             CancellationToken cancellationToken = default;
             var expectedStatus = 500;
             var exceptionMessage = "message";
-            _mockRepository.GetMock<IDeleteOrderService>().Setup(s => s.DeleteAsync(It.IsAny<DeleteOrderRequest>()))
+            _mockRepository.GetMock<IDeleteProductService>().Setup(s => s.DeleteAsync(It.IsAny<DeleteProductRequest>()))
                 .ThrowsAsync(new Exception(exceptionMessage));
 
             // Act
