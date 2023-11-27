@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Ardalis.GuardClauses;
+using LineTenTest.Api.Extensions;
 using LineTenTest.Api.Utilities;
 
 namespace LineTenTest.Api.Services.Customer
@@ -29,7 +30,7 @@ namespace LineTenTest.Api.Services.Customer
                 Guard.Against.Null(request.Request);
                 Guard.Against.NullOrWhiteSpace(request.Request.FirstName);
                 Guard.Against.NullOrWhiteSpace(request.Request.LastName);
-                Guard.Against.NullOrWhiteSpace(request.Request.Email);
+                Guard.Against.InvalidEmail(request.Request.Email, nameof(request.Request.Email));
                 Guard.Against.NullOrWhiteSpace(request.Request.Phone);
                 productResult = await _service.CreateAsync(request.Request);
             }
