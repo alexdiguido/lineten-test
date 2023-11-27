@@ -1,4 +1,5 @@
-﻿using LineTenTest.Api.Dtos;
+﻿using Ardalis.GuardClauses;
+using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Queries;
 using LineTenTest.Domain.Services.Product;
 using MediatR;
@@ -6,17 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LineTenTest.Api.Services.Product
 {
-    public class GetProductRequestHandler : IRequestHandler<GetProductByIdQuery,ActionResult<ProductDto>>
+    public class GetProductRequestHandler : BaseProductRequestHandler<GetProductByIdQuery>
     {
-        private readonly Logger<GetProductRequestHandler> _logger;
+        private readonly IGetProductService _service;
 
-        public GetProductRequestHandler(IGetProductService service, Logger<GetProductRequestHandler> logger)
+        public GetProductRequestHandler(IGetProductService service, ILogger<GetProductRequestHandler> logger) : base(logger)
         {
-            _logger = logger;
+            _service = service;
         }
-        public Task<ActionResult<ProductDto>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+
+        protected override Func<Task<Domain.Entities.Product>> ExecuteServiceOperation(GetProductByIdQuery request)
         {
-            throw new NotImplementedException();
+            Guard.Against.NegativeOrZero(request.ProductId);
+            return async () => await _service.GetAsync(request.ProductId);
         }
     }
 }

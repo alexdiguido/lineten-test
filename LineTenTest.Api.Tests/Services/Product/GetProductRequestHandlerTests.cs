@@ -62,7 +62,7 @@ namespace LineTenTest.Api.Tests.Services.Product
             var productEntity = ProductBuilder.CreateDefault(); 
             var expectedStatus = 500;
             var exceptionMessage = "message";
-            _mockRepository.GetMock<ICreateProductService>().Setup(s => s.CreateAsync(It.IsAny<CreateProductRequest>()))
+            _mockRepository.GetMock<IGetProductService>().Setup(s => s.GetAsync(productId))
                 .ThrowsAsync(new Exception(exceptionMessage));
 
             // Act
