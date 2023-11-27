@@ -35,7 +35,7 @@ namespace LineTenTest.Api.Tests.Services.Customer
             {
                 FirstName = "FirstName",
                 LastName = "LastName",
-                Email = "Email",
+                Email = "Email@gmail.com",
                 Phone = "Phone"
             };
 
@@ -68,7 +68,7 @@ namespace LineTenTest.Api.Tests.Services.Customer
             {
                 FirstName = "FirstName",
                 LastName = "LastName",
-                Email = "Email",
+                Email = "Email@gmail.com",
                 Phone = "Phone"
             };
 
@@ -103,6 +103,7 @@ namespace LineTenTest.Api.Tests.Services.Customer
         [InlineData("firstName", null,"phone", "email")]
         [InlineData("", "lastname","phone", "email")]
         [InlineData(null, "lastname","phone", "email")]
+        [InlineData("firstname", "lastname","phone", "email")]
         public async Task Handle_RequestIsNotValid_ShouldReturnBadRequestResult(string firstName, string lastName, string phone, string email)
         {
             // Arrange
