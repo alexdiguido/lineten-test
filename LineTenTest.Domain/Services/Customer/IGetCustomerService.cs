@@ -1,4 +1,4 @@
-﻿namespace LineTenTest.Api.Services.Customer;
+﻿namespace LineTenTest.Domain.Services.Customer;
 
 public interface IGetCustomerService
 {
