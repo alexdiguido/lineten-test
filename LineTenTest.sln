@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.Infrastructure"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.Api.Tests", "LineTenTest.Api.Tests\LineTenTest.Api.Tests.csproj", "{CE0CD0C5-6AD2-4705-B56B-434B910CE9BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.TestUtilities", "LineTenTest.TestUtilities\LineTenTest.TestUtilities.csproj", "{879DF0D4-CC1E-471D-B613-F8E6DB1FA297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineTenTest.TestUtilities", "LineTenTest.TestUtilities\LineTenTest.TestUtilities.csproj", "{879DF0D4-CC1E-471D-B613-F8E6DB1FA297}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineTenTest.Api.IntegrationTests", "LineTenTest.Api.IntegrationTests\LineTenTest.Api.IntegrationTests.csproj", "{CEF66C33-3A0D-4E77-8E8C-C2DEFA4DE724}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{879DF0D4-CC1E-471D-B613-F8E6DB1FA297}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{879DF0D4-CC1E-471D-B613-F8E6DB1FA297}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{879DF0D4-CC1E-471D-B613-F8E6DB1FA297}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEF66C33-3A0D-4E77-8E8C-C2DEFA4DE724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEF66C33-3A0D-4E77-8E8C-C2DEFA4DE724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEF66C33-3A0D-4E77-8E8C-C2DEFA4DE724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEF66C33-3A0D-4E77-8E8C-C2DEFA4DE724}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
