@@ -27,8 +27,8 @@ public class CreateOrderService : ICreateOrderService
         var product =
             await _productRepository.FirstOrDefaultAsync(new GetProductToUpdateSpecification(createOrderRequest.ProductId));
         var orderEntity = OrderFactory.CreateOrder(createOrderRequest);
-        orderEntity.CustomerId = customer?.Id ?? throw new NotFoundException("Customer not exists");
-        orderEntity.ProductId = product?.Id ?? throw new NotFoundException("Product not exists");;
+        orderEntity.CustomerId = customer?.Id ?? throw new EntityNotFoundException("Customer not exists");
+        orderEntity.ProductId = product?.Id ?? throw new EntityNotFoundException("Product not exists");;
         orderEntity.Customer = customer;
         orderEntity.Product = product;
         var orderResult = await _orderRepository.AddAsync(orderEntity);

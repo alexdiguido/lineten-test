@@ -25,13 +25,13 @@ public class UpdateOrderService : IUpdateOrderService
         var order = await _orderRepository.FirstOrDefaultAsync(new GetOrderByIdSpecificationToUpdate(request.OrderId));
         if (order == null)
         {
-            throw new NotFoundException("Order Not Found");
+            throw new EntityNotFoundException("Order Not Found");
         }
 
         if (order.Customer.Id != request.CustomerId)
         {
             var customer = await _customerRepository.FirstOrDefaultAsync(new GetCustomerToUpdateSpecification(request.CustomerId));
-            order.CustomerId = customer?.Id ?? throw new NotFoundException("Customer not found");
+            order.CustomerId = customer?.Id ?? throw new EntityNotFoundException("Customer not found");
             order.Customer = customer;
         }
 
@@ -39,11 +39,12 @@ public class UpdateOrderService : IUpdateOrderService
         {
             var product =
                 await _productRepository.FirstOrDefaultAsync(new GetProductToUpdateSpecification(request.ProductId));
-            order.ProductId = product?.Id ?? throw new NotFoundException("Product not found");;
+            order.ProductId = product?.Id ?? throw new EntityNotFoundException("Product not found");;
             order.Product = product;
         }
         
         order.Status = request.Status;
+        order.UpdatedDate = DateTime.UtcNow;
         await _orderRepository.SaveChangesAsync();
 
         return order;

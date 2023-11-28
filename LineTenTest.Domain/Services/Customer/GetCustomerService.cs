@@ -15,6 +15,6 @@ public class GetCustomerService : IGetCustomerService
     public async Task<Entities.Customer> GetAsync(int customerId)
     {
         var customer = await _repository.FirstOrDefaultAsync(new GetCustomerSpecification(customerId));
-        return customer ?? throw new NotFoundException("customer not found");
+        return customer ?? throw new EntityNotFoundException("customer not found");
     }
 }

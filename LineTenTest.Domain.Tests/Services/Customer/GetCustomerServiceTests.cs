@@ -59,7 +59,7 @@ namespace LineTenTest.Domain.Tests.Services.Customer
 
             // Assert
 
-            await result.Should().ThrowAsync<NotFoundException>(message);
+            await result.Should().ThrowAsync<EntityNotFoundException>(message);
         }
     }
 }

@@ -17,7 +17,7 @@ public class DeleteCustomerService : IDeleteCustomerService
         var customer = await _repository.FirstOrDefaultAsync(new GetCustomerToUpdateSpecification(request.CustomerId));
         if (customer == null)
         {
-            throw new NotFoundException("Customer not found");
+            throw new EntityNotFoundException("Customer not found");
         }
         await _repository.DeleteAsync(customer);
         await _repository.SaveChangesAsync();

@@ -7,7 +7,6 @@ using LineTenTest.Api.Utilities.Mappers;
 using LineTenTest.Domain.Services.Product;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NotFoundException = LineTenTest.Domain.Exceptions.NotFoundException;
 
 namespace LineTenTest.Api.Services.Product
 {

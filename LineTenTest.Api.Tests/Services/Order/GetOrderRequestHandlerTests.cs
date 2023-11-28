@@ -64,7 +64,7 @@ namespace LineTenTest.Api.Tests.Services.Order
 
             var exceptionMessage = "message";
             _mockRepository.GetMock<IGetOrderService>().Setup(s => s.GetAsync(orderId))
-                .ThrowsAsync(new NotFoundException(exceptionMessage));
+                .ThrowsAsync(new EntityNotFoundException(exceptionMessage));
 
             // Act
             var result = await getOrderRequestHandler.Handle(request, cancellationToken);

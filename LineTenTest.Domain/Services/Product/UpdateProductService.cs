@@ -18,7 +18,7 @@ public class UpdateProductService : IUpdateProductService
 
         if (product == null)
         {
-            throw new NotFoundException("product not found");
+            throw new EntityNotFoundException("product not found");
         }
 
         product.SKU = request.Sku;

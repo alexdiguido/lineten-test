@@ -55,7 +55,7 @@ namespace LineTenTest.Domain.Tests.Services.Order
 
             // Assert
 
-            await result.Should().ThrowAsync<NotFoundException>(message);
+            await result.Should().ThrowAsync<EntityNotFoundException>(message);
         }
     }
 }

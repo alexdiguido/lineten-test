@@ -20,7 +20,7 @@ public class GetOrderService : IGetOrderService
 
         if (order == null)
         {
-            throw new NotFoundException("Order not found");
+            throw new EntityNotFoundException("Order not found");
         }
 
         return order;

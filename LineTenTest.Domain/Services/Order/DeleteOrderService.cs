@@ -18,7 +18,7 @@ public class DeleteOrderService : IDeleteOrderService
         var order = await _orderRepository.FirstOrDefaultAsync(new GetOrderByIdSpecificationToUpdate(request.OrderId));
         if (order == null)
         {
-            throw new NotFoundException("Order Not Found");
+            throw new EntityNotFoundException("Order Not Found");
         }
 
         await _orderRepository.DeleteAsync(order);

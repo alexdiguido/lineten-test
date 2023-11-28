@@ -20,7 +20,7 @@ public class UpdateCustomerService : IUpdateCustomerService
 
         if (customer == null)
         {
-            throw new NotFoundException("customer not found");
+            throw new EntityNotFoundException("customer not found");
         }
 
         customer.FirstName = request.FirstName;

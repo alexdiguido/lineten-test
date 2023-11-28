@@ -18,7 +18,7 @@ public class DeleteProductService : IDeleteProductService
         var product = await _repository.FirstOrDefaultAsync(new GetProductToUpdateSpecification(request.ProductId));
         if (product == null)
         {
-            throw new NotFoundException("Product not found");
+            throw new EntityNotFoundException("Product not found");
         }
         await _repository.DeleteAsync(product);
         await _repository.SaveChangesAsync();

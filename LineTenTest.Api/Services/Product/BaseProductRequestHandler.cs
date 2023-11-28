@@ -1,11 +1,11 @@
-﻿using Ardalis.GuardClauses;
-using LineTenTest.Api.Dtos;
+﻿using LineTenTest.Api.Dtos;
 using LineTenTest.Api.Utilities.Mappers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using LineTenTest.Api.Utilities;
 using LineTenTest.Api.Services.Order;
+using LineTenTest.Domain.Exceptions;
 
 namespace LineTenTest.Api.Services.Product
 {
@@ -32,7 +32,7 @@ namespace LineTenTest.Api.Services.Product
             {
                 return new BadRequestObjectResult(argumentEx.Message);
             }
-            catch (NotFoundException)
+            catch (EntityNotFoundException)
             {
                 return new NotFoundResult();
             }

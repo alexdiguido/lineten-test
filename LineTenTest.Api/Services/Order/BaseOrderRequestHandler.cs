@@ -31,7 +31,7 @@ namespace LineTenTest.Api.Services.Order
             {
                 return new BadRequestObjectResult(argumentEx.Message);
             }
-            catch (NotFoundException)
+            catch (EntityNotFoundException)
             {
                 return new NotFoundResult();
             }
