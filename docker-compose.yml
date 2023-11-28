@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  linetentest.api:
+    image: ${DOCKER_REGISTRY-}linetentestapi
+    container_name: orderLt
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: LineTenTest.Api/Dockerfile
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: orderLt-db
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1431:1433"
