@@ -21,7 +21,6 @@ namespace LineTenTest.Api.Services.Customer
 
         public async Task<IActionResult> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
-            Domain.Entities.Customer? customerResult;
             try
             {
                 Guard.Against.Negative(request.Request.CustomerId);
