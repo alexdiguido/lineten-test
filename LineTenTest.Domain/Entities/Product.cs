@@ -12,4 +12,5 @@ public class Product : IDbEntity
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string SKU { get; set; } = string.Empty;
+    public List<Order> Orders { get; set; } = new List<Order>();
 }

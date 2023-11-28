@@ -10,15 +10,15 @@ using LineTenTest.Infrastructure;
 using LineTenTest.Domain.Services.Order;
 using LineTenTest.Domain.Exceptions;
 
-namespace LineTenTest.Domain.Tests.Services
+namespace LineTenTest.Domain.Tests.Services.Order
 {
     public class GetOrderServiceTests : IClassFixture<DatabaseFixture>
     {
-        private readonly EfRepository<Order> _orderRepository;
+        private readonly EfRepository<Domain.Entities.Order> _orderRepository;
 
         public GetOrderServiceTests(DatabaseFixture dbFixture)
         {
-            _orderRepository = new EfRepository<Order>(dbFixture.DbContext);
+            _orderRepository = new EfRepository<Domain.Entities.Order>(dbFixture.DbContext);
         }
 
         private GetOrderService CreateService()
@@ -26,7 +26,7 @@ namespace LineTenTest.Domain.Tests.Services
             return new GetOrderService(_orderRepository);
         }
 
-        [Fact] 
+        [Fact]
         public async Task GetAsync_OrderExist_ShouldReturnOrderAllOrderData()
         {
             // Arrange
@@ -50,7 +50,7 @@ namespace LineTenTest.Domain.Tests.Services
             result.Product.SKU.Should().NotBeNullOrWhiteSpace();
         }
 
-        [Fact] 
+        [Fact]
         public async Task GetAsync_OrderNotExist_ShouldThrowNotFoundException()
         {
             // Arrange

@@ -1,5 +1,4 @@
-﻿using Ardalis.Specification;
-using LineTenTest.Domain.Exceptions;
+﻿using LineTenTest.Domain.Exceptions;
 using LineTenTest.Domain.Factories;
 using LineTenTest.SharedKernel;
 using LineTenTest.SharedKernel.ApiModels;
@@ -32,13 +31,5 @@ public class UpdateCustomerService : IUpdateCustomerService
         await _repository.SaveChangesAsync();
 
         return customer;
-    }
-}
-
-public class GetCustomerToUpdateSpecification : Specification<Entities.Customer>
-{
-    public GetCustomerToUpdateSpecification(int customerId)
-    {
-        Query.Where(customer => customer.Id == customerId);
     }
 }

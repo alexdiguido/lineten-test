@@ -4,5 +4,5 @@ namespace LineTenTest.Domain.Services.Order;
 
 public interface ICreateOrderService
 {
-    Task<Entities.Order> CreateAsync(CreateOrderRequest requestCreateOrderRequest);
+    Task<Entities.Order> CreateAsync(CreateOrderRequest createOrderRequest);
 }

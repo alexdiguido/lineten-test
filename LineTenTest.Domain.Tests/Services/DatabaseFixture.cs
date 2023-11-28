@@ -22,7 +22,7 @@ public class DatabaseFixture : IDisposable
         DbContext.Dispose();
     }
 
-    private static List<Order> Arrange()
+    private static List<Domain.Entities.Order> Arrange()
     {
         var customers = ArrangeCustomers();
         var products = ArrangeProducts();
@@ -64,15 +64,15 @@ public class DatabaseFixture : IDisposable
             return customers;
         }
 
-        private static List<Order> ArrangeOrders(IEnumerable<Domain.Entities.Customer> customers, IEnumerable<Domain.Entities.Product> products)
+        private static List<Domain.Entities.Order> ArrangeOrders(IEnumerable<Domain.Entities.Customer> customers, IEnumerable<Domain.Entities.Product> products)
         {
-            var orders = new List<Order>();
+            var orders = new List<Domain.Entities.Order>();
             var date = new DateTime(2023, 11, 25, 11, 12, 13);
             var customerList = customers.ToList();
             var productsList = products.ToList();
             for (int i = 0; i < 10; i++)
             {
-                var order = new Order()
+                var order = new Domain.Entities.Order()
                 {
                     CreatedDate = date.AddDays(i),
                     UpdatedDate = date.AddDays(i + 1),

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\LineTenTest.SharedKernel\LineTenTest.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

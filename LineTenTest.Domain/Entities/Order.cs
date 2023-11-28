@@ -14,7 +14,8 @@ namespace LineTenTest.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
+        public int ProductId { get; set; }
+        public int CustomerId { get; set; }
         public Product Product { get; set; } = new Product();
         public Customer Customer { get; set; } = new Customer();
         public int Status { get; set; }
