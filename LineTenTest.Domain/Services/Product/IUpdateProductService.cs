@@ -1,4 +1,5 @@
-﻿using LineTenTest.SharedKernel.ApiModels;
+﻿using LineTenTest.Domain.Services.Customer;
+using LineTenTest.SharedKernel.ApiModels;
 
 namespace LineTenTest.Domain.Services.Product;
 
