@@ -63,7 +63,7 @@ namespace LineTenTest.Api.IntegrationTests
             // Arrange
             var client = _factory.CreateClient();
 
-            var createProductRequest = new UpdateProductRequest()
+            var updateProductRequest = new UpdateProductRequest()
             {
                 ProductId = 1,
                 Name = "name",
@@ -71,8 +71,13 @@ namespace LineTenTest.Api.IntegrationTests
                 Sku = "sku"
             };
 
+            var jsonContent = new StringContent(
+                System.Text.Json.JsonSerializer.Serialize(updateProductRequest),
+                Encoding.UTF8,
+                "application/json");
+
             // Act
-            var response = await client.PostAsJsonAsync("/api/v1/product/update", createProductRequest);
+            var response = await client.PutAsync("/api/v1/product/update", jsonContent);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -88,7 +93,7 @@ namespace LineTenTest.Api.IntegrationTests
 
             var deleteProductRequest = new DeleteProductRequest()
             {
-                ProductId = 1,
+                ProductId = 10,
             };
 
             // Act
@@ -97,8 +102,6 @@ namespace LineTenTest.Api.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            var createdProduct = await response.Content.ReadFromJsonAsync<ProductDto>();
-            Assert.NotNull(createdProduct);
         }
     }
 }

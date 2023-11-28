@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using LineTenTest.Domain.Entities;
@@ -11,76 +12,67 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LineTenTest.Api.IntegrationTests
 {
     public class IntTestWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> 
         where TProgram : class
 
+    { 
+        public readonly static string ConnectionString = "Data Source=TestDb.db";
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        builder.ConfigureServices(services =>
         {
-            builder.ConfigureServices(services =>
+            RemoveAllDbContextsFromServices(services);
+
+            services.AddDbContext<AppDbContext>(options =>
             {
-                var dbContextDescriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                         typeof(DbContextOptions<AppDbContext>));
-
-                services.Remove(dbContextDescriptor);
-
-                var dbConnectionDescriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                         typeof(DbConnection));
-
-                services.Remove(dbConnectionDescriptor);
-
-                services.AddSingleton<DbConnection>(container =>
-                {
-                    var connection = new SqliteConnection("DataSource=:memory:");
-                    connection.Open();
-
-                    return connection;
-                });
-
-
-                services.AddDbContext<AppDbContext>((container, options) =>
-                {
-                    var connection = container.GetRequiredService<DbConnection>();
-                    options.UseSqlite(connection);
-                });
-
-                SeedInMemoryDatabase(services);
+                var projectAssemblyName = Assembly.GetAssembly(typeof(IntTestWebApplicationFactory<>)).GetName().Name;
+                options.UseSqlite(ConnectionString, x => x.MigrationsAssembly(projectAssemblyName));
             });
-        }
 
-        private void SeedInMemoryDatabase(IServiceCollection services)
+            services.AddDbContext<AppDbContextSqlLite>();
+
+            MigrateDbContext(services);
+        });
+    }
+
+    private void RemoveAllDbContextsFromServices(IServiceCollection services)
+    {
+        var descriptors = services.Where(d => d.ServiceType.BaseType == typeof(DbContextOptions)).ToList();
+        descriptors.ForEach(d => services.Remove(d));
+
+        var dbContextDescriptors = services.Where(d => d.ServiceType.BaseType == typeof(DbContext)).ToList();
+        dbContextDescriptors.ForEach(d => services.Remove(d));
+    }
+
+    public void MigrateDbContext(IServiceCollection serviceCollection)
+    {
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        using var scope = serviceProvider.CreateScope();
+
+        var services = scope.ServiceProvider;
+        var context = services.GetService<AppDbContextSqlLite>();
+
+        if (context.Database.IsSqlServer())
         {
-            var serviceProvider = services.BuildServiceProvider();
-
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var dbContext = scopedServices.GetRequiredService<AppDbContext>();
-
-                dbContext.Database.OpenConnection();
-                dbContext.Database.EnsureCreated();
-
-                try
-                {
-                    var customers = ArrangeCustomers();
-                    dbContext.Customers.AddRange(customers);
-                    var products = ArrangeProducts();
-                    dbContext.Products.AddRange(products);
-                    var orders = ArrangeOrders(customers,products);
-                    dbContext.Orders.AddRange(orders);
-                    dbContext.SaveChanges();
-                }
-                finally
-                {
-                    dbContext.Database.CloseConnection();
-                }
-            }
+            throw new Exception("Use Sqlite instead of sql server!");
         }
+
+        context.Database.EnsureDeleted();
+        context.Database.Migrate();
+        var customers = ArrangeCustomers();
+        context.Customers.AddRange(customers);
+        var products = ArrangeProducts();
+        context.Products.AddRange(products);
+        var orders = ArrangeOrders(customers, products);
+        context.Orders.AddRange(orders);
+        context.SaveChanges();
+    }
 
         private static List<Domain.Entities.Order> Arrange()
         {

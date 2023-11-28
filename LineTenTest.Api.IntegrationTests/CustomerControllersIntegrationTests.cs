@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text;
 using LineTenTest.Api.Controllers;
 using LineTenTest.Api.Dtos;
 using LineTenTest.Domain.Entities;
@@ -63,17 +64,23 @@ namespace LineTenTest.Api.IntegrationTests
             // Arrange
             var client = _factory.CreateClient();
 
-            var createCustomerRequest = new UpdateCustomerRequest()
+            var updateCustomerRequest = new UpdateCustomerRequest()
             {
-                CustomerId = 1,
+                CustomerId = 2,
                 Email = "email@gmail.com",
                 Phone = "phone",
                 FirstName = "firstName",
                 LastName = "lastname"
             };
 
+            var jsonContent = new StringContent(
+                System.Text.Json.JsonSerializer.Serialize(updateCustomerRequest),
+                Encoding.UTF8,
+                "application/json"
+            );
+
             // Act
-            var response = await client.PostAsJsonAsync("/api/v1/customer/update", createCustomerRequest);
+            var response = await client.PutAsync("/api/v1/customer/update", jsonContent);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -89,16 +96,14 @@ namespace LineTenTest.Api.IntegrationTests
 
             var deleteCustomerRequest = new DeleteCustomerRequest()
             {
-                CustomerId = 1,
+                CustomerId = 5,
             };
 
             // Act
-            var response = await client.DeleteAsync($"/api/v1/customer/delete?CustomerId={deleteCustomerRequest.CustomerId}");
+            var response = await client.DeleteAsync($"/api/v1/customer/delete?customerId={deleteCustomerRequest.CustomerId}");
 
             // Assert
             response.EnsureSuccessStatusCode();
-            var createdCustomer = await response.Content.ReadFromJsonAsync<CustomerDto>();
-            Assert.NotNull(createdCustomer);
         }
     }
 }

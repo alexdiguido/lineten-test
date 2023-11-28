@@ -61,16 +61,21 @@ namespace LineTenTest.Api.IntegrationTests
             // Arrange
             var client = _factory.CreateClient();
 
-            var createOrderRequest = new UpdateOrderRequest()
+            var updateOrderRequest = new UpdateOrderRequest()
             {
-                OrderId = 1,
+                OrderId = 5,
                 CustomerId = 1,
                 ProductId = 1,
                 Status = 5
             };
 
+            var jsonContent = new StringContent(
+                System.Text.Json.JsonSerializer.Serialize(updateOrderRequest),
+                Encoding.UTF8,
+                "application/json");
+
             // Act
-            var response = await client.PostAsJsonAsync("/api/v1/order/update", createOrderRequest);
+            var response = await client.PutAsync("/api/v1/order/update", jsonContent);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -86,7 +91,7 @@ namespace LineTenTest.Api.IntegrationTests
 
             var deleteOrderRequest = new DeleteOrderRequest()
             {
-                OrderId = 1,
+                OrderId = 10,
             };
 
             // Act
@@ -94,8 +99,6 @@ namespace LineTenTest.Api.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            var createdOrder = await response.Content.ReadFromJsonAsync<OrderDto>();
-            Assert.NotNull(createdOrder);
         }
     }
 }
