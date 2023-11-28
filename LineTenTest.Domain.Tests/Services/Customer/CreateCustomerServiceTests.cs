@@ -27,7 +27,7 @@ namespace LineTenTest.Domain.Tests.Services.Customer
         }
 
         [Fact] 
-        public async Task CreateAsync_OrderExist_ShouldReturnOrderAllOrderData()
+        public async Task CreateAsync_CustomerExists_ShouldReturnOrderAllOrderData()
         {
             // Arrange
             var service = CreateService();
