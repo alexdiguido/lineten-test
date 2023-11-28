@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using LineTenTest.Api.Extensions;
 using LineTenTest.Api.Utilities;
+using LineTenTest.Domain.Services.Customer;
 
 namespace LineTenTest.Api.Services.Customer
 {

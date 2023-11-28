@@ -46,12 +46,12 @@ public class DatabaseFixture : IDisposable
             return products;
         }
 
-        private static IEnumerable<Customer> ArrangeCustomers()
+        private static IEnumerable<Domain.Entities.Customer> ArrangeCustomers()
         {
-            var customers = new List<Customer>();
+            var customers = new List<Domain.Entities.Customer>();
             for (int i = 0; i < 10; i++)
             {
-                var customer = new Customer()
+                var customer = new Domain.Entities.Customer()
                 {
                     FirstName = $"CustomerFirstName{i}",
                     LastName = $"CustomerLastName{i}",
@@ -64,7 +64,7 @@ public class DatabaseFixture : IDisposable
             return customers;
         }
 
-        private static List<Order> ArrangeOrders(IEnumerable<Customer> customers, IEnumerable<Product> products)
+        private static List<Order> ArrangeOrders(IEnumerable<Domain.Entities.Customer> customers, IEnumerable<Product> products)
         {
             var orders = new List<Order>();
             var date = new DateTime(2023, 11, 25, 11, 12, 13);

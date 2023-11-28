@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using LineTenTest.SharedKernel;
 
 namespace LineTenTest.Domain.Entities;
 
-public class Customer
+public class Customer : IDbEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
