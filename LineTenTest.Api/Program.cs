@@ -48,12 +48,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("OrderConnectionString"), builder =>
         builder.EnableRetryOnFailure());
 });
+
 var app = builder.Build();
 
-using var serviceScope = app.Services.CreateScope();
-var provider = serviceScope.ServiceProvider;
-var dbContext = provider.GetRequiredService<AppDbContext>();
-dbContext.Database.Migrate();
+if (!string.Equals(app.Environment.EnvironmentName, "IntegrationTest", StringComparison.OrdinalIgnoreCase))
+{
+    using var serviceScope = app.Services.CreateScope();
+    var provider = serviceScope.ServiceProvider;
+    var dbContext = provider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

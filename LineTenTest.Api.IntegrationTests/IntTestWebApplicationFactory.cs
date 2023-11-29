@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -19,60 +20,69 @@ namespace LineTenTest.Api.IntegrationTests
     public class IntTestWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> 
         where TProgram : class
 
-    { 
-        public readonly static string ConnectionString = "Data Source=TestDb.db";
-
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services =>
-        {
-            RemoveAllDbContextsFromServices(services);
+        public static readonly string ConnectionString = "Data Source=TestDb.db";
 
-            services.AddDbContext<AppDbContext>(options =>
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            builder.ConfigureServices(services =>
             {
-                var projectAssemblyName = Assembly.GetAssembly(typeof(IntTestWebApplicationFactory<>)).GetName().Name;
-                options.UseSqlite(ConnectionString, x => x.MigrationsAssembly(projectAssemblyName));
+                RemoveAppDbContextsFromServices(services);
+
+                services.AddDbContext<AppDbContext>(options =>
+                {
+                    var configuration = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile($"appsettings.IntegrationTest.json", optional: false, reloadOnChange: true)
+                        .Build();
+
+                    var connectionString = configuration.GetConnectionString("OrderConnectionString");
+
+                    var projectAssemblyName = Assembly.GetAssembly(typeof(IntTestWebApplicationFactory<>)).GetName().Name;
+                    options.UseSqlite(connectionString, x => x.MigrationsAssembly(projectAssemblyName));
+                });
+
+                services.AddDbContext<AppDbContextSqlLite>();
+
+                MigrateDbContext(services);
             });
-
-            services.AddDbContext<AppDbContextSqlLite>();
-
-            MigrateDbContext(services);
-        });
-    }
-
-    private void RemoveAllDbContextsFromServices(IServiceCollection services)
-    {
-        var descriptors = services.Where(d => d.ServiceType.BaseType == typeof(DbContextOptions)).ToList();
-        descriptors.ForEach(d => services.Remove(d));
-
-        var dbContextDescriptors = services.Where(d => d.ServiceType.BaseType == typeof(DbContext)).ToList();
-        dbContextDescriptors.ForEach(d => services.Remove(d));
-    }
-
-    public void MigrateDbContext(IServiceCollection serviceCollection)
-    {
-        var serviceProvider = serviceCollection.BuildServiceProvider();
-
-        using var scope = serviceProvider.CreateScope();
-
-        var services = scope.ServiceProvider;
-        var context = services.GetService<AppDbContextSqlLite>();
-
-        if (context.Database.IsSqlServer())
-        {
-            throw new Exception("Use Sqlite instead of sql server!");
+            
+            
         }
 
-        context.Database.EnsureDeleted();
-        context.Database.Migrate();
-        var customers = ArrangeCustomers();
-        context.Customers.AddRange(customers);
-        var products = ArrangeProducts();
-        context.Products.AddRange(products);
-        var orders = ArrangeOrders(customers, products);
-        context.Orders.AddRange(orders);
-        context.SaveChanges();
-    }
+        private void RemoveAppDbContextsFromServices(IServiceCollection services)
+        {
+            var descriptors = services.Where(d => d.ServiceType.BaseType == typeof(DbContextOptions)).ToList();
+            descriptors.ForEach(d => services.Remove(d));
+
+            var dbContextDescriptors = services.Where(d => d.ServiceType.BaseType == typeof(DbContext)).ToList();
+            dbContextDescriptors.ForEach(d => services.Remove(d));
+        }
+
+        public void MigrateDbContext(IServiceCollection serviceCollection)
+        {
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            using var scope = serviceProvider.CreateScope();
+
+            var services = scope.ServiceProvider;
+            var context = services.GetService<AppDbContextSqlLite>();
+
+            if (context.Database.IsSqlServer())
+            {
+                throw new Exception("Use Sqlite instead of sql server!");
+            }
+
+            context.Database.EnsureDeleted();
+            context.Database.Migrate();
+            var customers = ArrangeCustomers();
+            context.Customers.AddRange(customers);
+            var products = ArrangeProducts();
+            context.Products.AddRange(products);
+            var orders = ArrangeOrders(customers, products);
+            context.Orders.AddRange(orders);
+            context.SaveChanges();
+        }
 
         private static List<Domain.Entities.Order> Arrange()
         {
